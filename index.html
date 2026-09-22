@@ -1,13 +1,1156 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111111" />
-    <title>RADIUS MOBILE</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>RADIUS MOBILE</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:#0b0d0f;
+  color:#f5f5f5;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+:root{
+  --orange:#ff7a00;
+  --orange2:#ff9b38;
+  --bg:#0b0d0f;
+  --card:#15181c;
+  --card2:#1b1f24;
+  --border:#2a2f35;
+  --muted:#9299a3;
+  --green:#22c55e;
+  --red:#ef4444;
+  --yellow:#f59e0b;
+  --blue:#3b82f6;
+}
+
+.app{min-height:100vh}
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(11,13,15,.96);
+  border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  backdrop-filter:blur(15px);
+}
+
+.toprow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.logo span{color:var(--orange)}
+
+.demo{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border:1px solid #774000;
+  border-radius:20px;
+  color:#ffae55;
+  background:#24170d;
+  font-size:11px;
+  font-weight:800;
+}
+
+.user{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 16px 100px;
+}
+
+h1{font-size:27px;margin:0 0 7px}
+h2{font-size:21px;margin:0 0 15px}
+h3{font-size:16px;margin:0 0 10px}
+p{color:var(--muted);line-height:1.5}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.card{
+  background:linear-gradient(145deg,#171a1e,#111417);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
+  box-shadow:0 8px 30px rgba(0,0,0,.18);
+}
+
+.card.full{grid-column:1/-1}
+
+.stat{
+  font-size:27px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:13px 16px;
+  color:white;
+  background:var(--orange);
+  font-weight:800;
+}
+
+.btn:hover{filter:brightness(1.08)}
+
+.btn.secondary{
+  background:#22272d;
+  border:1px solid #343a42;
+}
+
+.btn.danger{background:#7f1d1d}
+.btn.green{background:#15803d}
+.btn.blue{background:#1d4ed8}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:14px;
+}
+
+.nav{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:20px;
+  padding-bottom:3px;
+}
+
+.nav button{
+  white-space:nowrap;
+  background:#171a1e;
+  color:#aeb4bc;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:10px 13px;
+}
+
+.nav button.active{
+  color:white;
+  border-color:#874500;
+  background:#2a190d;
+}
+
+.form{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+
+.field label{
+  color:#aeb4bc;
+  font-size:12px;
+}
+
+.field input,.field select{
+  width:100%;
+  padding:13px;
+  border-radius:11px;
+  border:1px solid #30363d;
+  background:#0f1215;
+  color:white;
+  outline:none;
+}
+
+.field input:focus,.field select:focus{
+  border-color:var(--orange);
+}
+
+.bank{
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:10px;
+  background:#121519;
+}
+
+.banktop{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+}
+
+.bankname{font-weight:800}
+
+.priority{
+  color:var(--orange2);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.status{
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.approved{background:#12351f;color:#4ade80}
+.rejected{background:#3a1518;color:#f87171}
+.pending{background:#382c0d;color:#fbbf24}
+.error{background:#252832;color:#a5b4fc}
+.waiting{background:#25282c;color:#a1a1aa}
+
+.progress{
+  height:7px;
+  background:#25292e;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0;
+}
+
+.progress div{
+  height:100%;
+  background:var(--orange);
+  transition:.3s;
+}
+
+.result{
+  padding:13px;
+  border-radius:12px;
+  margin-top:10px;
+  background:#0c0f12;
+  border:1px solid var(--border);
+}
+
+.tablewrap{overflow:auto}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th,td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+
+th{color:#9299a3;font-size:11px}
+
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 50% 10%,#34200f 0,#0b0d0f 42%);
+}
+
+.loginbox{
+  width:min(430px,100%);
+  background:#14171b;
+  border:1px solid #30353c;
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+.loginlogo{
+  text-align:center;
+  font-size:30px;
+  font-weight:950;
+  margin-bottom:5px;
+}
+
+.loginlogo span{color:var(--orange)}
+
+.center{text-align:center}
+
+.small{
+  color:#737b85;
+  font-size:11px;
+  margin-top:14px;
+}
+
+.notice{
+  padding:13px;
+  border-radius:12px;
+  background:#24170d;
+  border:1px solid #704000;
+  color:#ffbd75;
+  font-size:12px;
+  margin-bottom:14px;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  background:#20252b;
+  border:1px solid #3b424b;
+  color:white;
+  padding:12px 17px;
+  border-radius:12px;
+  z-index:100;
+  box-shadow:0 10px 40px #0008;
+  display:none;
+}
+
+@media(max-width:700px){
+  .grid,.form{grid-template-columns:1fr}
+  .card.full,.field.full{grid-column:auto}
+  main{padding:16px 12px 90px}
+  h1{font-size:23px}
+}
+
+@media(min-width:900px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* =========================================================
+   RADIUS MOBILE DEMO
+   Только тестовая версия.
+   Нет реальных банков, API или кредитного скоринга.
+   ========================================================= */
+
+const DEMO_BANKS = [
+  {
+    id:"rb",
+    name:"RADIUS Bank Demo",
+    result:"rejected",
+    limit:0,
+    months:0
+  },
+  {
+    id:"tf",
+    name:"Tashkent Finance Demo",
+    result:"rejected",
+    limit:0,
+    months:0
+  },
+  {
+    id:"up",
+    name:"UzPay Credit Demo",
+    result:"approved",
+    limit:15000000,
+    months:12
+  },
+  {
+    id:"cf",
+    name:"Capital Finance Demo",
+    result:"pending",
+    limit:0,
+    months:0
+  }
+];
+
+let banks = JSON.parse(localStorage.getItem("radius_banks") || "null") || DEMO_BANKS;
+
+let applications = JSON.parse(
+  localStorage.getItem("radius_apps") || "null"
+) || [
+  {
+    id:"RM-0001",
+    client:"Тестовый клиент",
+    phone:"+998 90 000 00 00",
+    product:"Холодильник Demo",
+    seller:"Rinat",
+    status:"approved",
+    bank:"UzPay Credit Demo",
+    limit:15000000,
+    date:new Date().toLocaleDateString("ru-RU")
+  }
+];
+
+let currentUser = null;
+let page = "dashboard";
+let currentApplication = null;
+
+function save(){
+  localStorage.setItem("radius_apps",JSON.stringify(applications));
+  localStorage.setItem("radius_banks",JSON.stringify(banks));
+}
+
+function money(n){
+  return Number(n||0).toLocaleString("ru-RU")+" UZS";
+}
+
+function toast(text){
+  const t=document.getElementById("toast");
+  t.textContent=text;
+  t.style.display="block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>t.style.display="none",2500);
+}
+
+function login(){
+  document.getElementById("app").innerHTML=`
+    <div class="login">
+      <div class="loginbox">
+        <div class="loginlogo">RADIUS <span>MOBILE</span></div>
+        <div class="center">
+          <div class="demo">● DEMO MODE</div>
+          <p>Корпоративная система оформления заявок</p>
+        </div>
+
+        <div class="notice">
+          В этой версии используются только тестовые данные.
+          Реальные банки и кредитные истории не подключены.
+        </div>
+
+        <div class="field">
+          <label>Пользователь</label>
+          <select id="loginRole">
+            <option value="seller">Seller — продавец</option>
+            <option value="admin">Admin — администратор</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-top:12px">
+          <label>Пароль DEMO</label>
+          <input id="loginPassword" type="password" value="1234">
+        </div>
+
+        <button class="btn" style="width:100%;margin-top:16px"
+          onclick="doLogin()">Войти в DEMO</button>
+
+        <div class="small center">
+          Тестовый пароль: 1234
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function doLogin(){
+  const role=document.getElementById("loginRole").value;
+  const pass=document.getElementById("loginPassword").value;
+
+  if(pass!=="1234"){
+    toast("Неверный DEMO-пароль");
+    return;
+  }
+
+  currentUser={
+    role,
+    name:role==="admin"?"Administrator":"Rinat"
+  };
+
+  page="dashboard";
+  render();
+}
+
+function logout(){
+  currentUser=null;
+  login();
+}
+
+function render(){
+  if(!currentUser){
+    login();
+    return;
+  }
+
+  document.getElementById("app").innerHTML=`
+    <div class="app">
+      <header class="top">
+        <div class="toprow">
+          <div class="logo">RADIUS <span>MOBILE</span></div>
+          <div class="demo">● DEMO MODE</div>
+        </div>
+        <div class="user">
+          ${currentUser.name} · ${currentUser.role==="admin"?"Administrator":"Seller"}
+        </div>
+      </header>
+
+      <main>
+        ${navigation()}
+        ${pageContent()}
+      </main>
+    </div>
+  `;
+}
+
+function navigation(){
+  let items=[
+    ["dashboard","Главная"],
+    ["new","Новая заявка"],
+    ["apps","Заявки"]
+  ];
+
+  if(currentUser.role==="admin"){
+    items.push(["admin","Админ-панель"]);
+  }
+
+  items.push(["logout","Выйти"]);
+
+  return `
+    <div class="nav">
+      ${items.map(x=>`
+        <button class="${page===x[0]?"active":""}"
+          onclick="${x[0]==="logout"?"logout()":"go('"+x[0]+"')"}">
+          ${x[1]}
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+function go(p){
+  page=p;
+  render();
+}
+
+function pageContent(){
+
+  if(page==="dashboard") return dashboard();
+
+  if(page==="new") return newApplication();
+
+  if(page==="apps") return applicationsPage();
+
+  if(page==="admin" && currentUser.role==="admin") return adminPage();
+
+  return dashboard();
+}
+
+function dashboard(){
+
+  const total=applications.length;
+  const approved=applications.filter(a=>a.status==="approved").length;
+  const rejected=applications.filter(a=>a.status==="rejected").length;
+
+  return `
+    <h1>Добро пожаловать</h1>
+    <p>Рабочее пространство RADIUS MOBILE.</p>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="label">Всего заявок</div>
+        <div class="stat">${total}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Одобрено</div>
+        <div class="stat">${approved}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Отказы</div>
+        <div class="stat">${rejected}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Банков DEMO</div>
+        <div class="stat">${banks.length}</div>
+      </div>
+
+      <div class="card full">
+        <h3>Как работает система</h3>
+
+        <p>
+          Продавец один раз заполняет анкету клиента.
+          Далее система проверяет тестовые финансовые организации
+          последовательно по приоритету.
+        </p>
+
+        <div class="actions">
+          <button class="btn" onclick="go('new')">
+            + Создать заявку
+          </button>
+          <button class="btn secondary" onclick="go('apps')">
+            История заявок
+          </button>
+        </div>
+      </div>
+
+      <div class="card full">
+        <h3>Демо-цепочка</h3>
+
+        ${banks.map((b,i)=>`
+          <div class="bank">
+            <div class="banktop">
+              <div>
+                <div class="bankname">${i+1}. ${b.name}</div>
+                <div class="priority">
+                  Приоритет ${i+1}
+                </div>
+              </div>
+              <span class="status waiting">TEST</span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+
+    </div>
+  `;
+}
+
+function newApplication(){
+
+  return `
+    <h1>Новая заявка</h1>
+    <p>Единая анкета клиента. Все данные тестовые.</p>
+
+    <div class="card">
+
+      <div class="notice">
+        После заполнения анкеты система начнёт последовательную
+        DEMO-проверку банков по приоритету.
+      </div>
+
+      <div class="form">
+
+        <div class="field">
+          <label>ФИО клиента *</label>
+          <input id="clientName" placeholder="Например: Иванов Иван Иванович">
+        </div>
+
+        <div class="field">
+          <label>Телефон *</label>
+          <input id="clientPhone" placeholder="+998 90 123 45 67">
+        </div>
+
+        <div class="field">
+          <label>Паспорт / ID</label>
+          <input id="clientPassport" placeholder="AA1234567">
+        </div>
+
+        <div class="field">
+          <label>Дата рождения</label>
+          <input id="clientBirth" type="date">
+        </div>
+
+        <div class="field">
+          <label>Город</label>
+          <input id="clientCity" value="Ташкент">
+        </div>
+
+        <div class="field">
+          <label>Работа</label>
+          <input id="clientWork" placeholder="Место работы">
+        </div>
+
+        <div class="field">
+          <label>Ежемесячный доход</label>
+          <input id="clientIncome" type="number" placeholder="5000000">
+        </div>
+
+        <div class="field">
+          <label>Стаж работы</label>
+          <input id="clientExperience" placeholder="2 года">
+        </div>
+
+        <div class="field">
+          <label>Товар *</label>
+          <input id="productName" placeholder="Например: телевизор Samsung">
+        </div>
+
+        <div class="field">
+          <label>Стоимость товара *</label>
+          <input id="productPrice" type="number" placeholder="10000000">
+        </div>
+
+        <div class="field">
+          <label>Первоначальный взнос</label>
+          <input id="firstPayment" type="number" value="0">
+        </div>
+
+        <div class="field">
+          <label>Количество месяцев</label>
+          <select id="requestedMonths">
+            <option>6</option>
+            <option selected>12</option>
+            <option>18</option>
+            <option>24</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="startApplication()">
+          Начать проверку
+        </button>
+
+        <button class="btn secondary" onclick="go('dashboard')">
+          Отмена
+        </button>
+      </div>
+
+    </div>
+  `;
+}
+
+function startApplication(){
+
+  const name=document.getElementById("clientName").value.trim();
+  const phone=document.getElementById("clientPhone").value.trim();
+  const product=document.getElementById("productName").value.trim();
+  const price=Number(document.getElementById("productPrice").value);
+
+  if(!name || !phone || !product || !price){
+    toast("Заполните обязательные поля");
+    return;
+  }
+
+  currentApplication={
+    id:"RM-"+String(Date.now()).slice(-6),
+    client:name,
+    phone,
+    passport:document.getElementById("clientPassport").value,
+    birth:document.getElementById("clientBirth").value,
+    city:document.getElementById("clientCity").value,
+    work:document.getElementById("clientWork").value,
+    income:document.getElementById("clientIncome").value,
+    experience:document.getElementById("clientExperience").value,
+    product,
+    price,
+    firstPayment:document.getElementById("firstPayment").value,
+    months:document.getElementById("requestedMonths").value,
+    seller:currentUser.name,
+    bankIndex:0,
+    checked:[],
+    status:"checking"
+  };
+
+  page="checking";
+  renderChecking();
+}
+
+function renderChecking(){
+
+  const a=currentApplication;
+
+  document.getElementById("app").innerHTML=`
+    <div class="app">
+      <header class="top">
+        <div class="toprow">
+          <div class="logo">RADIUS <span>MOBILE</span></div>
+          <div class="demo">● DEMO MODE</div>
+        </div>
+        <div class="user">${currentUser.name} · Checking</div>
+      </header>
+
+      <main>
+
+        <div class="nav">
+          <button onclick="go('dashboard')">← Главная</button>
+        </div>
+
+        <h1>Проверка заявки</h1>
+        <p>
+          ${a.client} · ${a.product}
+        </p>
+
+        <div class="card">
+          <div class="label">Номер заявки</div>
+          <div class="stat" style="font-size:21px">${a.id}</div>
+        </div>
+
+        <br>
+
+        <div class="card">
+
+          <h3>Последовательная проверка</h3>
+
+          <div class="progress">
+            <div style="width:${Math.min(
+              100,
+              ((a.checked.length)/banks.length)*100
+            )}%"></div>
+          </div>
+
+          ${banks.map((b,i)=>{
+            const checked=a.checked.find(x=>x.id===b.id);
+
+            let status="waiting";
+            let text="Ожидает";
+
+            if(checked){
+              status=checked.result;
+              text=
+                checked.result==="approved"?"Одобрено":
+                checked.result==="rejected"?"Отказ":
+                checked.result==="pending"?"На рассмотрении":
+                "Ошибка";
+            }
+
+            if(i===a.bankIndex && !checked){
+              status="pending";
+              text="Проверяется";
+            }
+
+            return `
+              <div class="bank">
+                <div class="banktop">
+                  <div>
+                    <div class="bankname">${i+1}. ${b.name}</div>
+                    <div class="priority">Приоритет ${i+1}</div>
+                  </div>
+
+                  <span class="status ${status}">
+                    ${text}
+                  </span>
+                </div>
+
+                ${checked && checked.result==="approved" ? `
+                  <div class="result">
+                    <b>Одобрено</b><br><br>
+                    Лимит: ${money(b.limit)}<br>
+                    Срок: ${b.months} месяцев
+                  </div>
+                `:""}
+
+                ${checked && checked.result==="rejected" ? `
+                  <div class="result">
+                    Тестовый результат: заявка отклонена.
+                  </div>
+                `:""}
+              </div>
+            `;
+          })}
+
+          ${
+            a.status==="checking"
+            ? `<button class="btn" onclick="checkNextBank()">
+                Проверить следующий банк
+              </button>`
+            : ""
+          }
+
+          ${
+            a.status==="approved"
+            ? `
+              <div class="result">
+                <h3>✅ Заявка одобрена</h3>
+                <p>Цепочка остановлена после одобрения.</p>
+
+                <div class="actions">
+                  ${
+                    currentUser.role==="admin"
+                    ? `<button class="btn blue"
+                        onclick="openAdditionalApplication()">
+                        + Открыть дополнительную заявку
+                      </button>`
+                    : ""
+                  }
+
+                  <button class="btn green"
+                    onclick="finishApplication()">
+                    Завершить сделку
+                  </button>
+                </div>
+              </div>
+            `
+            : ""
+          }
+
+          ${
+            a.status==="rejected"
+            ? `
+              <div class="result">
+                <h3>Все тестовые банки отказали</h3>
+                <p>В DEMO-режиме цепочка закончилась.</p>
+                <button class="btn secondary"
+                  onclick="finishApplication()">
+                  Закрыть заявку
+                </button>
+              </div>
+            `
+            : ""
+          }
+
+        </div>
+
+      </main>
+    </div>
+  `;
+}
+
+function checkNextBank(){
+
+  const a=currentApplication;
+
+  if(a.bankIndex>=banks.length){
+    a.status="rejected";
+    renderChecking();
+    return;
+  }
+
+  const bank=banks[a.bankIndex];
+
+  a.checked.push({
+    id:bank.id,
+    result:bank.result
+  });
+
+  if(bank.result==="approved"){
+    a.status="approved";
+    a.approvedBank=bank.name;
+    a.limit=bank.limit;
+    a.approvedMonths=bank.months;
+  }else{
+    a.bankIndex++;
+
+    if(a.bankIndex>=banks.length){
+      a.status="rejected";
+    }
+  }
+
+  renderChecking();
+}
+
+function finishApplication(){
+
+  const a=currentApplication;
+
+  applications.unshift({
+    id:a.id,
+    client:a.client,
+    phone:a.phone,
+    product:a.product,
+    seller:a.seller,
+    status:a.status,
+    bank:a.approvedBank||"-",
+    limit:a.limit||0,
+    date:new Date().toLocaleDateString("ru-RU")
+  });
+
+  save();
+
+  currentApplication=null;
+  page="apps";
+  render();
+
+  toast("Заявка сохранена");
+}
+
+function openAdditionalApplication(){
+
+  if(currentUser.role!=="admin"){
+    toast("Доступ только для Admin");
+    return;
+  }
+
+  const a=currentApplication;
+
+  const secondBank=banks.find(
+    b=>!a.checked.some(x=>x.id===b.id)
+  );
+
+  const newId="RM-"+String(Date.now()).slice(-6);
+
+  applications.unshift({
+    id:newId,
+    client:a.client,
+    phone:a.phone,
+    product:a.product,
+    seller:a.seller,
+    status:"pending",
+    bank:secondBank ? secondBank.name : "-",
+    limit:0,
+    date:new Date().toLocaleDateString("ru-RU"),
+    parent:a.id
+  });
+
+  save();
+
+  toast("Дополнительная заявка создана: "+newId);
+  go("apps");
+}
+
+function applicationsPage(){
+
+  return `
+    <h1>Заявки</h1>
+    <p>История DEMO-заявок.</p>
+
+    <div class="card">
+      ${
+        applications.length
+        ? `
+          <div class="tablewrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>№</th>
+                  <th>Клиент</th>
+                  <th>Товар</th>
+                  <th>Банк</th>
+                  <th>Статус</th>
+                  <th>Сумма</th>
+                  <th>Продавец</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                ${applications.map(a=>`
+                  <tr>
+                    <td>${a.id}</td>
+                    <td>${a.client}<br>
+                      <small>${a.phone}</small>
+                    </td>
+                    <td>${a.product}</td>
+                    <td>${a.bank}</td>
+                    <td>
+                      <span class="status ${a.status}">
+                        ${
+                          a.status==="approved"?"Одобрено":
+                          a.status==="rejected"?"Отказ":
+                          a.status==="pending"?"В обработке":
+                          a.status
+                        }
+                      </span>
+                    </td>
+                    <td>${a.limit?money(a.limit):"-"}</td>
+                    <td>${a.seller}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `
+        : `<div class="empty">Заявок пока нет</div>`
+      }
+    </div>
+  `;
+}
+
+function adminPage(){
+
+  return `
+    <h1>Админ-панель</h1>
+    <p>Управление тестовой системой RADIUS MOBILE.</p>
+
+    <div class="grid">
+
+      <div class="card full">
+        <h3>Приоритет банков</h3>
+        <p>
+          В реальной системе здесь администратор сможет менять
+          последовательность партнёров.
+        </p>
+
+        ${banks.map((b,i)=>`
+          <div class="bank">
+            <div class="banktop">
+              <div>
+                <div class="bankname">${i+1}. ${b.name}</div>
+                <div class="priority">
+                  DEMO result: ${b.result}
+                </div>
+              </div>
+
+              <div class="actions" style="margin:0">
+                <button class="btn secondary"
+                  onclick="moveBank(${i},-1)"
+                  ${i===0?"disabled":""}>
+                  ↑
+                </button>
+
+                <button class="btn secondary"
+                  onclick="moveBank(${i},1)"
+                  ${i===banks.length-1?"disabled":""}>
+                  ↓
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="card">
+        <h3>Пользователи</h3>
+        <p>Продавцы: 1</p>
+        <p>Администраторы: 1</p>
+      </div>
+
+      <div class="card">
+        <h3>Безопасность DEMO</h3>
+        <p>Реальные банковские API: выключены</p>
+        <p>Реальные кредитные данные: выключены</p>
+        <p>Реальный скоринг: выключен</p>
+      </div>
+
+      <div class="card full">
+        <h3>Система</h3>
+        <div class="result">
+          <b>DEMO MODE ACTIVE</b><br><br>
+          Все результаты банков являются заранее заданной
+          симуляцией и не имеют юридической или финансовой силы.
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+function moveBank(index,direction){
+
+  const newIndex=index+direction;
+
+  if(newIndex<0 || newIndex>=banks.length) return;
+
+  const temp=banks[index];
+  banks[index]=banks[newIndex];
+  banks[newIndex]=temp;
+
+  save();
+  render();
+}
+
+/* Запуск */
+render();
+</script>
+
+</body>
 </html>
